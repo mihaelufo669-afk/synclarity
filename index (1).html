@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Synclarity — Build Patterns That Last</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#0d0d0d;
+  --black-2:#1c1c1c;
+  --black-3:#2e2e2e;
+  --white:#ffffff;
+  --off:#f6f7f7;
+  --off-2:#eef0f0;
+  --teal:#17a892;
+  --teal-2:#1fc4ae;
+  --teal-pale:#e4f7f5;
+  --teal-dark:#0e8070;
+  --gray:#686868;
+  --gray-2:#9e9e9e;
+  --gray-3:#d6d6d6;
+  --serif:'Fraunces',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --r:10px;--r-lg:18px;--r-xl:24px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--white);color:var(--black);font-size:17px;line-height:1.65;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+
+/* ANNOUNCE */
+.abar{background:var(--black);color:var(--white);text-align:center;padding:10px 20px;font-size:13px;position:sticky;top:0;z-index:300;display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap}
+.abar-badge{background:var(--teal);color:white;font-size:11px;font-weight:500;padding:3px 10px;border-radius:99px;letter-spacing:.05em;flex-shrink:0}
+.abar-text{color:rgba(255,255,255,.8);font-size:13px}
+.abar-text strong{color:#7ee8dc}
+.timer-wrap{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.45)}
+.tblock{background:rgba(255,255,255,.1);border-radius:4px;padding:2px 7px;font-size:13px;font-weight:500;color:white;min-width:28px;text-align:center;font-variant-numeric:tabular-nums}
+.tsep{color:rgba(255,255,255,.35)}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:var(--white);border-bottom:1px solid var(--gray-3);position:sticky;top:41px;z-index:200}
+.nav-logo{font-family:var(--serif);font-size:20px;font-weight:400;letter-spacing:-.02em;color:var(--black)}
+.nav-logo span{color:var(--teal)}
+.nav-right{display:flex;align-items:center;gap:14px}
+.nav-stock{font-size:12px;color:var(--gray);display:flex;align-items:center;gap:6px}
+.sdot{width:7px;height:7px;border-radius:50%;background:var(--teal);display:inline-block;animation:sdot 2s infinite}
+@keyframes sdot{0%,100%{opacity:1}50%{opacity:.3}}
+.nav-btn{background:var(--black);color:white;padding:10px 22px;border-radius:99px;font-size:14px;font-weight:500;border:none;cursor:pointer;transition:background .2s,transform .1s;display:inline-block}
+.nav-btn:hover{background:var(--teal-dark);transform:translateY(-1px)}
+
+/* SHARED */
+section{padding:80px 48px}
+.inn{max-width:1100px;margin:0 auto}
+.ey{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);font-weight:500;display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.ey::before{content:'';width:20px;height:1px;background:var(--teal);display:inline-block}
+h2.st{font-family:var(--serif);font-size:clamp(30px,4vw,46px);font-weight:300;line-height:1.1;letter-spacing:-.025em;margin-bottom:18px;color:var(--black)}
+h2.st em{font-style:italic;color:var(--teal)}
+.bt{font-size:17px;color:var(--black-3);line-height:1.7}
+.btn-t{display:inline-block;background:var(--teal);color:white;padding:16px 36px;border-radius:99px;font-size:15px;font-weight:500;border:none;cursor:pointer;transition:background .2s,transform .15s;text-align:center}
+.btn-t:hover{background:var(--teal-dark);transform:translateY(-2px)}
+.btn-t small{display:block;font-size:12px;font-weight:300;opacity:.85;margin-top:2px}
+.btn-k{display:inline-block;background:var(--black);color:white;padding:16px 36px;border-radius:99px;font-size:15px;font-weight:500;border:none;cursor:pointer;transition:background .2s,transform .15s;text-align:center}
+.btn-k:hover{background:var(--black-3);transform:translateY(-2px)}
+.btn-k small{display:block;font-size:12px;font-weight:300;opacity:.75;margin-top:2px}
+.mcta{text-align:center;padding:28px 0 0}
+.mcta .btn-t{font-size:15px;padding:14px 32px}
+.mcta p{font-size:12px;color:var(--gray-2);margin-top:10px}
+
+/* HERO */
+.hero{background:var(--white);padding:72px 48px 60px}
+.hero-grid{display:grid;grid-template-columns:1fr 460px;gap:64px;align-items:center;max-width:1100px;margin:0 auto}
+.hero-h1{font-family:var(--serif);font-size:clamp(38px,5vw,58px);font-weight:300;line-height:1.07;letter-spacing:-.03em;margin-bottom:22px;color:var(--black)}
+.hero-h1 em{font-style:italic;color:var(--teal)}
+.hero-sub{font-size:17px;color:var(--black-3);line-height:1.65;margin-bottom:26px;max-width:480px}
+.proof-strip{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.pc{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--black-3);background:var(--off);padding:6px 12px;border-radius:99px;border:1px solid var(--gray-3)}
+.pc .ic{font-size:13px}
+.hero-cta{display:flex;flex-direction:column;gap:10px}
+.hero-cta .btn-t{width:fit-content}
+.guar{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--gray);margin-top:4px}
+.guar::before{content:'🔒';font-size:14px}
+
+/* Product Visual */
+.pcard{background:var(--off);border-radius:var(--r-xl);border:1px solid var(--gray-3);overflow:hidden}
+.pcard-head{background:var(--black);padding:18px 24px;display:flex;align-items:center;justify-content:space-between}
+.pcard-head-title{font-family:var(--serif);font-size:17px;font-weight:400;color:white}
+.pbadge{background:var(--teal);color:white;font-size:11px;padding:3px 10px;border-radius:99px;font-weight:500}
+.pcard-body{padding:28px 24px;display:flex;gap:14px;align-items:stretch}
+.bottle{width:100px;flex-shrink:0;background:var(--black);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px 12px;gap:6px;position:relative;overflow:hidden}
+.bottle::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),#7ee8dc)}
+.bottle-label{font-family:var(--serif);font-size:12px;color:white;font-style:italic;text-align:center;line-height:1.3}
+.bottle-sub{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35)}
+.bottle-ico{font-size:30px}
+.bottle-caps{font-size:10px;color:var(--teal-2);text-align:center;letter-spacing:.05em}
+.pitems{flex:1;display:flex;flex-direction:column;gap:9px}
+.pitem{background:white;border-radius:var(--r);padding:11px 13px;border:1px solid var(--gray-3);display:flex;align-items:center;gap:10px}
+.pitem-ico{font-size:18px;flex-shrink:0}
+.pitem-name{font-size:13px;font-weight:500;color:var(--black)}
+.pitem-desc{font-size:11px;color:var(--gray-2);margin-top:1px}
+.pitem-role{font-size:10px;color:var(--teal);letter-spacing:.06em;text-transform:uppercase;font-weight:500;margin-top:2px}
+.pcard-foot{border-top:1px solid var(--gray-3);padding:18px 24px}
+.stock-wrap{margin-bottom:14px}
+.stock-row{display:flex;justify-content:space-between;font-size:11px;color:var(--gray);margin-bottom:5px}
+.stock-row span:last-child{color:var(--teal);font-weight:500}
+.stock-bar{height:5px;background:var(--gray-3);border-radius:99px;overflow:hidden}
+.stock-fill{height:100%;background:var(--teal);border-radius:99px;width:68%}
+.price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:5px}
+.price-main{font-family:var(--serif);font-size:44px;font-weight:400;color:var(--black);line-height:1}
+.price-was{font-size:17px;color:var(--gray-2);text-decoration:line-through}
+.price-save{font-size:11px;background:var(--teal-pale);color:var(--teal-dark);padding:3px 9px;border-radius:99px;border:1px solid rgba(23,168,146,.2);font-weight:500}
+.price-note{font-size:12px;color:var(--gray);margin-bottom:14px}
+
+/* TRUST BAR */
+.tbar{background:var(--black-2);padding:18px 48px}
+.tbar-inn{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:36px;flex-wrap:wrap}
+.ti{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.65)}
+.ti strong{color:white;font-weight:500}
+.tdiv{width:1px;height:22px;background:rgba(255,255,255,.1)}
+
+/* CRED */
+.cred-section{background:var(--off)}
+.cred-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:38px}
+.cred-card{background:white;border-radius:var(--r-lg);padding:20px 22px;border:1px solid var(--gray-3);display:flex;gap:13px;align-items:flex-start}
+.ccheck{width:26px;height:26px;border-radius:50%;background:var(--teal-pale);border:1px solid rgba(23,168,146,.2);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:2px;color:var(--teal)}
+.cred-card h4{font-size:14px;font-weight:500;color:var(--black);margin-bottom:3px}
+.cred-card p{font-size:13px;color:var(--gray);line-height:1.55}
+.cred-bottom{margin-top:18px;background:var(--black);border-radius:var(--r-lg);padding:22px 26px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.cred-bottom p{font-size:14px;color:rgba(255,255,255,.65);line-height:1.6;flex:1}
+.cred-bottom strong{color:white;font-weight:500}
+.cbadges{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap}
+.cbadge{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:var(--r);padding:7px 13px;text-align:center}
+.cbadge .cbi{font-size:17px;margin-bottom:2px}
+.cbadge .cbl{font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.07em;white-space:nowrap}
+
+/* LOOP */
+.loop-section{background:var(--white)}
+.loop-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+.lp-steps{margin-top:32px;display:flex;flex-direction:column}
+.lp-step{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid var(--off-2)}
+.lp-step:last-child{border-bottom:none}
+.lp-num{flex-shrink:0;width:30px;height:30px;border-radius:50%;border:1px solid var(--gray-3);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--gray-2);font-family:var(--serif);background:var(--off)}
+.lp-step.active .lp-num{background:var(--teal);border-color:var(--teal);color:white}
+.lp-step strong{font-size:15px;font-weight:500;color:var(--black);display:block;margin-bottom:3px}
+.lp-step p{font-size:14px;color:var(--gray);line-height:1.55}
+.rf-box{background:var(--black);border-radius:var(--r-lg);padding:34px;margin-top:32px}
+.rf-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal-2);margin-bottom:12px;opacity:.8}
+.rf-box blockquote{font-family:var(--serif);font-size:20px;font-weight:300;font-style:italic;color:white;line-height:1.45;margin-bottom:14px}
+.rf-box p{font-size:14px;color:rgba(255,255,255,.5);line-height:1.6}
+
+/* SYSTEM */
+.sys-section{background:var(--off)}
+.sys-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:40px}
+.sc{background:white;border-radius:var(--r-lg);padding:26px 22px;border:1px solid var(--gray-3);position:relative;overflow:hidden}
+.sc::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.sc.fuel::after{background:var(--teal)}
+.sc.blue-print::after{background:#888}
+.sc.mirror::after{background:var(--black-3)}
+.sc-num{font-family:var(--serif);font-size:11px;color:var(--gray-2);margin-bottom:12px;letter-spacing:.06em}
+.sc-ico{font-size:26px;margin-bottom:12px}
+.sc-role{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--gray-2);margin-bottom:5px}
+.sc.fuel .sc-role{color:var(--teal)}
+.sc h3{font-family:var(--serif);font-size:19px;font-weight:400;margin-bottom:9px;color:var(--black)}
+.sc p{font-size:14px;color:var(--black-3);line-height:1.6;margin-bottom:12px}
+.sc-out{background:var(--off);border-radius:var(--r);padding:11px 13px;font-size:13px;color:var(--black-3);line-height:1.5;border-left:2px solid var(--gray-3)}
+.sc.fuel .sc-out{border-left-color:var(--teal)}
+.sc.blue-print .sc-out{border-left-color:#888}
+.sc-call{margin-top:26px;background:var(--teal-pale);border:1px solid rgba(23,168,146,.18);border-radius:var(--r-lg);padding:22px 26px;display:flex;gap:14px;align-items:flex-start}
+.sc-call-ico{font-size:18px;flex-shrink:0;margin-top:2px}
+.sc-call p{font-size:15px;color:var(--black-3);line-height:1.65}
+.sc-call strong{color:var(--black);font-weight:500}
+
+/* FOUNDER */
+.founder-section{background:var(--white)}
+.fg{display:grid;grid-template-columns:260px 1fr;gap:54px;align-items:start}
+.fimg{background:var(--off);border-radius:var(--r-lg);aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border:1px solid var(--gray-3);position:relative;overflow:hidden}
+.fimg-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.5),transparent);padding:16px;text-align:center}
+.fimg-name{font-size:13px;font-weight:500;color:white}
+.fimg-title{font-size:11px;color:rgba(255,255,255,.6)}
+.fimg-initials{width:70px;height:70px;border-radius:50%;background:var(--black);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:26px;color:white}
+.fimg-note{font-size:11px;color:var(--gray-2);text-align:center;padding:0 16px}
+.fquote{font-family:var(--serif);font-size:clamp(19px,2.5vw,27px);font-weight:300;font-style:italic;line-height:1.38;color:var(--black);margin-bottom:22px;padding-left:22px;border-left:2px solid var(--teal)}
+.fbody{font-size:16px;color:var(--black-3);line-height:1.72;margin-bottom:16px}
+.fsig{display:flex;align-items:center;gap:10px;padding-top:18px;border-top:1px solid var(--off-2);margin-top:4px}
+.fsig-name{font-weight:500;font-size:15px;color:var(--black)}
+.fsig-title{font-size:13px;color:var(--gray)}
+
+/* INGREDIENTS */
+.ingr-section{background:var(--off)}
+.ingr-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:40px}
+.ic2{background:white;border-radius:var(--r-lg);padding:20px 22px;border:1px solid var(--gray-3);display:flex;gap:14px;align-items:flex-start}
+.idot{flex-shrink:0;width:8px;height:8px;border-radius:50%;background:var(--teal);margin-top:7px}
+.iname{font-family:var(--serif);font-size:17px;font-weight:400;color:var(--black);margin-bottom:3px}
+.ibenefit{font-size:11px;font-weight:500;color:var(--teal);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+.idesc{font-size:13px;color:var(--black-3);line-height:1.6}
+.istudy{font-size:11px;color:var(--gray-2);margin-top:5px;display:flex;align-items:center;gap:4px}
+.istudy::before{content:'📄';font-size:10px}
+
+/* TESTIMONIALS */
+.testi-section{background:var(--black)}
+.testi-section .ey{color:var(--teal-2)}
+.testi-section .ey::before{background:var(--teal-2)}
+.testi-section h2.st{color:white}
+.testi-section h2.st em{color:var(--teal-2)}
+.tg{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:40px}
+.tc{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:var(--r-lg);padding:24px 20px}
+.tstars{color:#f5c842;font-size:13px;letter-spacing:2px;margin-bottom:12px}
+.ttext{font-family:var(--serif);font-style:italic;font-size:16px;font-weight:300;line-height:1.55;color:rgba(255,255,255,.88);margin-bottom:16px}
+.tauth{display:flex;align-items:center;gap:10px;padding-top:13px;border-top:1px solid rgba(255,255,255,.07)}
+.tav{width:36px;height:36px;border-radius:50%;background:var(--black-3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--teal-2);flex-shrink:0}
+.tname{font-size:14px;font-weight:500;color:white}
+.tmeta{font-size:11px;color:rgba(255,255,255,.3)}
+.testi-section .mcta .btn-t{background:var(--teal)}
+.testi-section .mcta p{color:rgba(255,255,255,.3)}
+
+/* DAY7 */
+.d7-section{background:var(--off)}
+.d7-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;margin-top:40px}
+.tl-item{display:flex;gap:16px;padding-bottom:26px}
+.tl-l{display:flex;flex-direction:column;align-items:center;width:34px;flex-shrink:0}
+.tl-dot{width:11px;height:11px;border-radius:50%;background:var(--gray-3);border:2px solid var(--gray-3);flex-shrink:0;z-index:1}
+.tl-dot.on{background:var(--teal);border-color:var(--teal);box-shadow:0 0 0 4px rgba(23,168,146,.15)}
+.tl-line{width:1px;flex:1;background:var(--gray-3);min-height:30px}
+.tl-day{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-2);margin-bottom:3px}
+.tl-item.on .tl-day{color:var(--teal)}
+.tl-h{font-family:var(--serif);font-size:16px;font-weight:400;color:var(--black);margin-bottom:4px}
+.tl-p{font-size:14px;color:var(--gray);line-height:1.55}
+.d7-box{background:var(--black);border-radius:var(--r-lg);padding:34px}
+.d7-box h3{font-family:var(--serif);font-size:21px;font-weight:300;font-style:italic;color:white;margin-bottom:12px}
+.d7-box p{font-size:15px;color:rgba(255,255,255,.55);line-height:1.65}
+.d7-call{margin-top:16px;padding:14px;background:rgba(23,168,146,.12);border-radius:var(--r);border-left:2px solid var(--teal);font-size:14px;color:var(--teal-2);line-height:1.55}
+
+/* BUNDLES */
+.bun-section{background:var(--white)}
+.bun-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:40px;align-items:start}
+.bc{border-radius:var(--r-lg);border:1px solid var(--gray-3);overflow:hidden;background:white;position:relative}
+.bc.pop{border:2px solid var(--teal);box-shadow:0 8px 28px rgba(23,168,146,.12)}
+.pop-badge{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--teal);color:white;font-size:11px;font-weight:500;padding:4px 16px;border-radius:0 0 8px 8px;white-space:nowrap;letter-spacing:.04em}
+.bhead{padding:22px 22px 0;margin-top:6px}
+.bc.pop .bhead{margin-top:14px}
+.bplan{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gray-2);margin-bottom:5px}
+.bname{font-family:var(--serif);font-size:21px;font-weight:400;color:var(--black);margin-bottom:9px}
+.bprice-row{display:flex;align-items:baseline;gap:8px;margin-bottom:3px}
+.bprice{font-family:var(--serif);font-size:38px;font-weight:400;line-height:1;color:var(--black)}
+.bwas{font-size:15px;color:var(--gray-2);text-decoration:line-through}
+.bsave{font-size:11px;background:var(--teal-pale);color:var(--teal-dark);padding:3px 9px;border-radius:99px;font-weight:500;border:1px solid rgba(23,168,146,.2)}
+.bper{font-size:12px;color:var(--gray-2);margin-bottom:14px}
+.bdiv{height:1px;background:var(--gray-3);margin:0 22px}
+.binc{padding:16px 22px;display:flex;flex-direction:column;gap:8px}
+.bitem{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--black-3)}
+.bitem::before{content:'✓';color:var(--teal);font-weight:500;flex-shrink:0;margin-top:1px}
+.bfoot{padding:0 22px 22px}
+.bbtn{display:block;width:100%;padding:13px;border-radius:99px;font-size:15px;font-weight:500;text-align:center;border:1.5px solid var(--gray-3);background:white;color:var(--black);cursor:pointer;transition:all .2s}
+.bbtn:hover{border-color:var(--teal);color:var(--teal)}
+.bc.pop .bbtn{background:var(--teal);border-color:var(--teal);color:white}
+.bc.pop .bbtn:hover{background:var(--teal-dark)}
+.bnote{font-size:11px;color:var(--gray-2);text-align:center;margin-top:7px}
+.bun-warn{text-align:center;margin-top:16px;font-size:13px;color:var(--gray)}
+.bun-warn strong{color:var(--black)}
+
+/* FAQ */
+.faq-section{background:var(--off)}
+.faq-list{margin-top:40px;max-width:700px}
+details.fi{border-bottom:1px solid var(--gray-3)}
+summary.fq{display:flex;align-items:center;justify-content:space-between;padding:19px 0;cursor:pointer;font-size:16px;font-weight:500;color:var(--black);list-style:none;gap:14px}
+summary.fq::-webkit-details-marker{display:none}
+.fplus{flex-shrink:0;width:20px;height:20px;border-radius:50%;border:1px solid var(--gray-3);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--gray-2);transition:transform .2s}
+details[open] .fplus{transform:rotate(45deg);border-color:var(--teal);color:var(--teal)}
+.fa{font-size:15px;color:var(--black-3);line-height:1.7;padding:0 0 18px;max-width:620px}
+
+/* FINAL */
+.final-section{background:var(--black);color:white;text-align:center;padding:96px 48px}
+.final-section h2.st{color:white}
+.final-section h2.st em{color:var(--teal-2)}
+.final-section .ey{justify-content:center;color:var(--teal-2)}
+.final-section .ey::before{background:var(--teal-2)}
+.frrow{display:flex;justify-content:center;gap:26px;margin:32px 0;flex-wrap:wrap}
+.mr{max-width:175px;text-align:center}
+.mstars{color:#f5c842;font-size:13px;letter-spacing:2px;margin-bottom:5px}
+.mtext{font-family:var(--serif);font-style:italic;font-size:14px;color:rgba(255,255,255,.55);line-height:1.5}
+.mname{font-size:11px;color:rgba(255,255,255,.28);margin-top:4px}
+.final-cg{display:flex;flex-direction:column;align-items:center;gap:10px}
+.fbtn{display:inline-block;background:var(--teal);color:white;padding:19px 50px;border-radius:99px;font-size:17px;font-weight:500;transition:background .2s,transform .15s;border:none;cursor:pointer}
+.fbtn:hover{background:var(--teal-dark);transform:translateY(-2px)}
+.fbtn small{display:block;font-size:13px;font-weight:300;opacity:.8;margin-top:3px}
+.fsub{font-size:13px;color:rgba(255,255,255,.32)}
+
+/* FOOTER */
+footer{background:var(--black-2);padding:32px 48px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.07)}
+.flogo{font-family:var(--serif);font-size:18px;font-weight:400;color:white}
+.flogo span{color:var(--teal)}
+.flinks{display:flex;gap:18px}
+.flinks a{font-size:13px;color:rgba(255,255,255,.35);transition:color .2s}
+.flinks a:hover{color:rgba(255,255,255,.75)}
+.fdisc{font-size:11px;color:rgba(255,255,255,.22);max-width:540px;line-height:1.6}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.hero-left>*{opacity:0;animation:fadeUp .55s ease forwards}
+.hero-left>*:nth-child(1){animation-delay:.05s}
+.hero-left>*:nth-child(2){animation-delay:.13s}
+.hero-left>*:nth-child(3){animation-delay:.21s}
+.hero-left>*:nth-child(4){animation-delay:.29s}
+.hero-left>*:nth-child(5){animation-delay:.37s}
+.hero-left>*:nth-child(6){animation-delay:.44s}
+.hero-right{opacity:0;animation:fadeUp .65s ease .28s forwards}
+
+/* RESPONSIVE */
+@media(max-width:920px){
+  nav{padding:13px 20px;top:39px}
+  .hero{padding:42px 20px 38px}
+  .hero-grid{grid-template-columns:1fr;gap:34px}
+  .hero-right{order:-1}
+  section{padding:56px 20px}
+  .loop-grid,.fg,.d7-grid{grid-template-columns:1fr;gap:34px}
+  .sys-grid,.bun-grid,.tg,.ingr-grid,.cred-grid{grid-template-columns:1fr}
+  .tbar{padding:14px 20px}
+  .tdiv{display:none}
+  footer{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<!-- ANNOUNCE BAR -->
+<div class="abar">
+  <div style="display:flex;align-items:center;gap:10px">
+    <span class="abar-badge">Launch Offer</span>
+    <span class="abar-text"><strong>50% OFF</strong> — First Production Batch · Free US Shipping</span>
+  </div>
+  <div class="timer-wrap">
+    <span style="font-size:11px">Offer ends in</span>
+    <span class="tblock" id="th">00</span><span class="tsep">:</span>
+    <span class="tblock" id="tm">00</span><span class="tsep">:</span>
+    <span class="tblock" id="ts">00</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="https://sonicmind.co" target="_blank" style="display:flex;align-items:center"><img src="logo.png" alt="Sonic Mind" style="height:44px;width:auto"></a>
+  <div class="nav-right">
+    <div class="nav-stock"><span class="sdot"></span>Only 47 units left in this batch</div>
+    <a href="https://sonicmind.co/checkout" target="_blank" class="nav-btn">Get the System — $59</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <div class="hero-grid">
+    <div class="hero-left">
+      <div class="ey">Cognitive Performance System</div>
+      <h1 class="hero-h1">You're not lazy.<br>You're stuck in a pattern<br>your brain <em>keeps repeating.</em></h1>
+      <p class="hero-sub">Synclarity is a 3-part system designed to support focus, reinforce new habits, and help you build patterns that last — without stimulants or crashes.</p>
+      <div class="proof-strip">
+        <span class="pc"><span class="ic">⭐</span> 4.9/5 · 1,200+ users</span>
+        <span class="pc"><span class="ic">🧪</span> Third-party tested</span>
+        <span class="pc"><span class="ic">🏭</span> GMP-certified facility</span>
+        <span class="pc"><span class="ic">🇺🇸</span> Made in USA</span>
+      </div>
+      <div class="hero-cta">
+        <a href="https://sonicmind.co/checkout" target="_blank" class="btn-t">
+          Start the 30-Day System — $59
+          <small>Free Shipping · Limited First Batch</small>
+        </a>
+        <div class="guar">30-day risk-free guarantee.</div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="pcard">
+        <div class="pcard-head">
+          <span class="pcard-head-title">Synclarity System</span>
+          <span class="pbadge">Complete Bundle</span>
+        </div>
+        <div class="pcard-body">
+          <div class="bottle" style="padding:8px">
+            <img src="BNX1.png" alt="Synclarity System" style="width:100%;height:auto;border-radius:8px;object-fit:cover">
+          </div>
+          <div class="pitems">
+            <div class="pitem">
+              <div class="pitem-ico">💊</div>
+              <div>
+                <div class="pitem-name">Synclarity Supplement</div>
+                <div class="pitem-desc">30-day supply · 30 capsules</div>
+                <div class="pitem-role">The Fuel</div>
+              </div>
+            </div>
+            <div class="pitem">
+              <div class="pitem-ico">📖</div>
+              <div>
+                <div class="pitem-name">The Loop Breaker</div>
+                <div class="pitem-desc">Neuroplasticity guide · Instant access</div>
+                <div class="pitem-role">The Blueprint</div>
+              </div>
+            </div>
+            <div class="pitem">
+              <div class="pitem-ico">📋</div>
+              <div>
+                <div class="pitem-name">30-Day Tracker</div>
+                <div class="pitem-desc">Sent on Day 7 · Intentionally timed</div>
+                <div class="pitem-role">The Mirror</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pcard-foot">
+          <div class="stock-wrap">
+            <div class="stock-row"><span>First batch availability</span><span>47 units left</span></div>
+            <div class="stock-bar"><div class="stock-fill"></div></div>
+          </div>
+          <div class="price-row">
+            <span class="price-main">$59</span>
+            <span class="price-was">$120</span>
+            <span class="price-save">Save 50%</span>
+          </div>
+          <p class="price-note">One-time · Everything included</p>
+          <a href="https://sonicmind.co/checkout" target="_blank" class="btn-t" style="display:block;width:100%;text-align:center">
+            Get Started Now
+            <small>30-Day Guarantee · Free US Shipping</small>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TRUST BAR -->
+<div class="tbar">
+  <div class="tbar-inn">
+    <div class="ti"><span>🧪</span><span><strong>Third-Party Tested</strong> for purity &amp; potency</span></div>
+    <div class="tdiv"></div>
+    <div class="ti"><span>🏭</span><span><strong>GMP-Certified</strong> facility</span></div>
+    <div class="tdiv"></div>
+    <div class="ti"><span>🇺🇸</span><span><strong>Made in the USA</strong></span></div>
+    <div class="tdiv"></div>
+    <div class="ti"><span>🔒</span><span><strong>30-Day</strong> money-back guarantee<br><span style="font-size:11px;opacity:0.5"><a href="https://sonicmind.co/policies/refund-policy" target="_blank" style="color:rgba(255,255,255,0.5);text-decoration:underline">See refund policy</a></span></span></div>
+  </div>
+</div>
+
+<!-- CREDIBILITY -->
+<section class="cred-section">
+  <div class="inn">
+    <div class="ey">The Standard You Should Expect</div>
+    <h2 class="st">Not all supplements are<br><em>created equal</em></h2>
+    <p class="bt">Here's exactly what goes into Synclarity — and what you should demand from any supplement you put in your body.</p>
+    <div class="cred-grid">
+      <div class="cred-card"><div class="ccheck">✓</div><div><h4>Third-Party Tested for Purity</h4><p>Every batch is independently verified for ingredient accuracy, heavy metals, and contaminants — not just our word for it.</p></div></div>
+      <div class="cred-card"><div class="ccheck">✓</div><div><h4>Full Label Transparency</h4><p>No proprietary blends that hide dosages. Every ingredient and every amount is listed clearly on the label.</p></div></div>
+      <div class="cred-card"><div class="ccheck">✓</div><div><h4>Clinically Studied Ingredients</h4><p>Each ingredient is selected based on published human research — not animal studies, not theory.</p></div></div>
+      <div class="cred-card"><div class="ccheck">✓</div><div><h4>Stimulant-Free &amp; Non-Habit Forming</h4><p>No caffeine, no stimulants, no dependency risk. Designed for daily use without tolerance build-up or crashes.</p></div></div>
+    </div>
+    <div class="cred-bottom">
+      <p><strong>Manufactured in a GMP-certified facility</strong> in the USA. Every batch is produced under strict quality control standards enforced by federal regulation.</p>
+      <div class="cbadges">
+        <div class="cbadge"><div class="cbi">🏭</div><div class="cbl">GMP Certified</div></div>
+        <div class="cbadge"><div class="cbi">🧪</div><div class="cbl">3rd Party Tested</div></div>
+        <div class="cbadge"><div class="cbi">🇺🇸</div><div class="cbl">Made in USA</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOOP MECHANISM -->
+<section class="loop-section">
+  <div class="inn">
+    <div class="loop-grid">
+      <div>
+        <div class="ey">Why Nothing Has Worked</div>
+        <h2 class="st">The cycle that keeps<br><em>pulling you back</em></h2>
+        <p class="bt">You've been here before. You start strong, feel the momentum — and find yourself back at square one. Coffee, planners, motivation, other supplements. Nothing sticks.</p>
+        <p class="bt" style="margin-top:12px">The issue isn't willpower. It's how the brain maintains stability.</p>
+        <div class="lp-steps">
+          <div class="lp-step"><div class="lp-num">1</div><div><strong>You start with intention</strong><p>Clear goal, real energy, genuine commitment. Everything feels possible.</p></div></div>
+          <div class="lp-step"><div class="lp-num">2</div><div><strong>Your brain registers the change</strong><p>The default network detects unfamiliar patterns and begins its return-to-baseline response.</p></div></div>
+          <div class="lp-step"><div class="lp-num">3</div><div><strong>The drift begins — invisibly</strong><p>Old habits slowly resurface. Not because you're weak — because your brain is doing exactly what it evolved to do.</p></div></div>
+          <div class="lp-step active"><div class="lp-num">4</div><div><strong>The cycle resets</strong><p>You're back at the beginning. Frustrated. Wondering what's wrong with you. Nothing is.</p></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="rf-box">
+          <div class="rf-label">The Shift in Perspective</div>
+          <blockquote>"Nothing is wrong with you. Your brain is wired to return to familiar patterns — automatically. That's neuroscience. And those patterns can be changed."</blockquote>
+          <p>The comfort zone isn't a character flaw — it's a neural default. A survival mechanism designed to minimize energy. The only way to build lasting change isn't more willpower. It's changing the conditions that support new behavior. That's what Synclarity is built to do.</p>
+        </div>
+        <div class="mcta">
+          <a href="https://sonicmind.co/checkout" target="_blank" class="btn-t">Start the 30-Day System</a>
+          <p>30-day guarantee · Free US shipping</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SYSTEM -->
+<section class="sys-section">
+  <div class="inn">
+    <div class="ey">Why One Pill Isn't Enough</div>
+    <h2 class="st">Three parts.<br><em>One system.</em></h2>
+    <p class="bt">Every other brand sells you a bottle. Synclarity gives you a complete architecture. Each component plays a specific, irreplaceable role.</p>
+    <div class="sys-grid">
+      <div class="sc fuel">
+        <div class="sc-num">01</div><div class="sc-ico">💊</div>
+        <div class="sc-role">The Fuel</div>
+        <h3>Synclarity Supplement</h3>
+        <p>Science-backed nootropic formula that may help support focus and mental clarity — creating the conditions for new habits to form.</p>
+        <div class="sc-out"><strong>What it does for you:</strong> Helps support the mental clarity and follow-through you need to actually act on your intentions.</div>
+      </div>
+      <div class="sc blue-print">
+        <div class="sc-num">02</div><div class="sc-ico">📖</div>
+        <div class="sc-role">The Blueprint</div>
+        <h3>The Loop Breaker</h3>
+        <p>A practical guide that explains the mechanisms behind recurring mental patterns — and gives you specific protocols to work with them.</p>
+        <div class="sc-out"><strong>What it does for you:</strong> Shows you exactly what to do when the old pattern starts pulling you back.</div>
+      </div>
+      <div class="sc mirror">
+        <div class="sc-num">03</div><div class="sc-ico">📋</div>
+        <div class="sc-role">The Mirror</div>
+        <h3>30-Day Guided Tracker</h3>
+        <p>Daily guided questions that make your progress visible — the most underestimated element of lasting change.</p>
+        <div class="sc-out"><strong>What it does for you:</strong> Makes progress visible so your brain holds onto it instead of reverting.</div>
+      </div>
+    </div>
+    <div class="sc-call">
+      <div class="sc-call-ico">💡</div>
+      <p><strong>The insight most products miss:</strong> The supplement lowers resistance to change. The guide shows you the path. The tracker makes the change visible — and visibility is what makes the brain hold onto new patterns. Each part makes the others more effective.</p>
+    </div>
+    <div class="mcta">
+      <a href="https://sonicmind.co/checkout" target="_blank" class="btn-t">Get the Complete System</a>
+      <p>All 3 components · $59 · 30-day guarantee</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section class="founder-section">
+  <div class="inn">
+    <div class="ey">From the Founder</div>
+    <div class="fg">
+      <div class="fimg" style="background:var(--black);justify-content:center;gap:20px;padding:32px">
+        <img src="logo.png" alt="Sonic Mind" style="width:140px;height:auto">
+        <div style="text-align:center">
+          <div style="font-size:15px;font-weight:500;color:white">Michael</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.5)">Founder, Sonic Mind</div>
+        </div>
+      </div>
+      <div>
+        <div class="fquote">I didn't create Synclarity because I had everything figured out. I created it because I kept failing — even when I knew exactly what to do.</div>
+        <p class="fbody">I know what it feels like to start strong, to genuinely want the change, to put in real effort — and still end up back at the beginning. Not once. Not twice. On repeat.</p>
+        <p class="fbody">I tried everything the market offered: supplements that wore off by noon, productivity systems that needed more energy than they gave, motivation content that burned bright for 48 hours and left nothing behind.</p>
+        <p class="fbody">What changed wasn't finding the right pill. It was understanding that the cycle isn't a failure of character — it's a feature of how the brain resists change. Once I understood the mechanism, I could work with it instead of against it. Two years of building, testing, and refining later — Synclarity is the system that came out of that work.</p>
+        <p class="fbody">I stand behind it completely. Try it for 30 days. If you don't feel a meaningful difference, I'll refund every cent.</p>
+        <div class="fsig">
+          <div><div class="fsig-name">Michael</div><div class="fsig-title">Founder, Sonic Mind</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INGREDIENTS -->
+<section class="ingr-section">
+  <div class="inn">
+    <div class="ey">What's Inside</div>
+    <h2 class="st">The science behind<br><em>the clarity</em></h2>
+    <p class="bt">Every ingredient is selected for a specific role, dosed at levels consistent with published research. No proprietary blends. Full transparency.</p>
+    <div class="ingr-grid">
+      <div class="ic2"><div class="idot"></div><div><div class="iname">GABA</div><div class="ibenefit">Calm &amp; Mental Balance</div><p class="idesc">Gamma-aminobutyric acid is the brain's primary inhibitory neurotransmitter. It may help support a calmer mental state, reduce the mental noise that blocks focus, and create the conditions for clearer thinking.</p><div class="istudy">Abdou et al., BioFactors, 2006</div></div></div>
+      <div class="ic2"><div class="idot" style="background:#888"></div><div><div class="iname">L-Tyrosine</div><div class="ibenefit">Focus Under Pressure</div><p class="idesc">An amino acid involved in the synthesis of dopamine and norepinephrine. Research suggests it may help maintain cognitive performance during demanding or stressful situations when neurotransmitter levels are depleted.</p><div class="istudy">Deijen &amp; Orlebeke, Brain Research Bulletin, 1994</div></div></div>
+      <div class="ic2"><div class="idot" style="background:#b84040"></div><div><div class="iname">Bacopa Monnieri</div><div class="ibenefit">May Support Memory &amp; Learning</div><p class="idesc">An extensively studied adaptogen. Research suggests it may support memory consolidation and cognitive processing speed, particularly with consistent use over several weeks.</p><div class="istudy">Pase et al., Journal of Psychopharmacology, 2012</div></div></div>
+      <div class="ic2"><div class="idot" style="background:var(--teal)"></div><div><div class="iname">L-Theanine</div><div class="ibenefit">Calm, Alert Focus</div><p class="idesc">An amino acid from green tea associated with increased alpha brainwave activity — a state of relaxed alertness. Research suggests it may support attention and reduce the edge of stress without sedation.</p><div class="istudy">Gomez-Ramirez et al., Brain Topography, 2009</div></div></div>
+      <div class="ic2"><div class="idot" style="background:var(--black-3)"></div><div><div class="iname">Alpha GPC</div><div class="ibenefit">Acetylcholine &amp; Memory Support</div><p class="idesc">A highly bioavailable form of choline that supports acetylcholine synthesis — a neurotransmitter critical for memory, learning, and attention. Researched for its role in supporting cognitive performance.</p><div class="istudy">Bellar et al., Journal of the International Society of Sports Nutrition, 2012</div></div></div>
+      <div class="ic2"><div class="idot" style="background:var(--teal-dark)"></div><div><div class="iname">Phosphatidylserine</div><div class="ibenefit">Cognitive Speed Support</div><p class="idesc">A phospholipid that makes up a significant portion of brain cell membranes. Research supports its role in maintaining cell membrane health and has been associated with improved memory recall and processing speed.</p><div class="istudy">Vakhapova et al., J. Alzheimer's Disease, 2010</div></div></div>
+      <div class="ic2"><div class="idot" style="background:#7a5af8"></div><div><div class="iname">Huperzine A</div><div class="ibenefit">Acetylcholine Preservation</div><p class="idesc">A natural compound that inhibits acetylcholinesterase — the enzyme that breaks down acetylcholine. By slowing this breakdown, it may help maintain higher levels of this key neurotransmitter for longer periods of focus.</p><div class="istudy">Sun et al., Chinese Medical Journal, 1999</div></div></div>
+      <div class="ic2"><div class="idot" style="background:var(--gold, #c49a3a)"></div><div><div class="iname">B-Vitamin Complex</div><div class="ibenefit">Neural Energy &amp; Neurotransmitter Support</div><p class="idesc">B vitamins (including B6, B9, and B12) are essential cofactors in neurotransmitter synthesis and energy metabolism. They support the brain's baseline function and may help reduce mental fatigue over time.</p><div class="istudy">Kennedy, Nutrients, 2016</div></div></div>
+    </div>
+    <div class="mcta">
+      <a href="https://sonicmind.co/checkout" target="_blank" class="btn-t">Start the 30-Day System</a>
+      <p>Full transparency · No proprietary blends</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi-section">
+  <div class="inn">
+    <div class="ey">Real Results</div>
+    <h2 class="st">What people notice<br>after <em>Week 1</em></h2>
+    <div class="tg">
+      <div class="tc">
+        <div class="tstars">★★★★★</div>
+        <p class="ttext">"I was skeptical — I've tried every focus supplement available. What's different is the tracker. Seeing my own patterns written down made the cycle obvious. Something genuinely shifted around day 9."</p>
+        <div class="tauth"><div class="tav">JM</div><div><div class="tname">Jason M.</div><div class="tmeta">Software Engineer · Austin, TX · ✓ Verified</div></div></div>
+      </div>
+      <div class="tc">
+        <div class="tstars">★★★★★</div>
+        <p class="ttext">"The guide actually got me. I've read productivity books before but this explains the science in a way that made me go 'oh — that's why I keep doing this.' The supplement is solid too. Clean energy, no crash."</p>
+        <div class="tauth"><div class="tav">SR</div><div><div class="tname">Sarah R.</div><div class="tmeta">Freelance Designer · Portland, OR · ✓ Verified</div></div></div>
+      </div>
+      <div class="tc">
+        <div class="tstars">★★★★★</div>
+        <p class="ttext">"Three weeks in. I've started and stopped more things than I can count. This time it's different — the tracker is why. When you write down what you did and felt every day, you can't slip without noticing."</p>
+        <div class="tauth"><div class="tav">DK</div><div><div class="tname">David K.</div><div class="tmeta">Operations Manager · Chicago, IL · ✓ Verified</div></div></div>
+      </div>
+    </div>
+    <div class="mcta">
+      <a href="https://sonicmind.co/checkout" target="_blank" class="btn-t">Join 1,200+ Users</a>
+      <p>30-day guarantee · First batch going fast</p>
+    </div>
+  </div>
+</section>
+
+<!-- DAY 7 -->
+<section class="d7-section">
+  <div class="inn">
+    <div class="ey">Designed with Intent</div>
+    <h2 class="st">Why the tracker arrives<br>on <em>Day 7</em></h2>
+    <div class="d7-grid">
+      <div>
+        <div class="tl-item on"><div class="tl-l"><div class="tl-dot on"></div><div class="tl-line"></div></div><div><div class="tl-day">Day 1 — Order Placed</div><div class="tl-h">The Loop Breaker guide arrives instantly</div><p class="tl-p">Immediately after purchase, The Loop Breaker eBook lands in your inbox. Start reading — understanding the mechanism is the first step.</p></div></div>
+        <div class="tl-item"><div class="tl-l"><div class="tl-dot"></div><div class="tl-line"></div></div><div><div class="tl-day">Days 2–6</div><div class="tl-h">Read. Learn. Prepare.</div><p class="tl-p">Your physical order is on its way. Use this time to go through the guide — so that when the supplement arrives, you already understand what you're working with.</p></div></div>
+        <div class="tl-item on"><div class="tl-l"><div class="tl-dot on"></div><div class="tl-line"></div></div><div><div class="tl-day">Day 7 — System Arrives</div><div class="tl-h">Supplement + Tracker land together</div><p class="tl-p">The physical package arrives and the 30-Day Tracker is sent to your email the same day. You start the supplement and the daily tracking at the same time — the system begins.</p></div></div>
+        <div class="tl-item"><div class="tl-l"><div class="tl-dot"></div></div><div><div class="tl-day">Days 8–37</div><div class="tl-h">The full system runs.</div><p class="tl-p">Daily supplement + daily tracker questions + the guide's protocols working together. This is where the pattern starts to shift.</p></div></div>
+      </div>
+      <div class="d7-box">
+        <h3>This is what most systems miss.</h3>
+        <p>Almost every supplement gives you fuel but nothing to do with it. Every planner gives you structure but no energy to fill it. Every motivation video lights a fire that lasts 48 hours.</p>
+        <p style="margin-top:12px">Synclarity is built differently. Each component is timed and sequenced so the pieces reinforce each other at the moment your brain needs them most.</p>
+        <div class="d7-call">"Without awareness, the brain reverts. The tracker is the awareness mechanism — not a bonus, but the element that makes everything else work."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUNDLES -->
+<section class="bun-section" id="bundles">
+  <div class="inn">
+    <div class="ey">Choose Your System</div>
+    <h2 class="st">An offer you<br><em>can't say no to</em></h2>
+    <p class="bt">Every bundle includes the complete system. Choose the length that matches your commitment — the longer the run, the deeper the results.</p>
+    <div class="bun-grid">
+      <div class="bc">
+        <div class="bhead">
+          <div class="bplan">30-Day System</div>
+          <div class="bname">Starter Supply</div>
+          <div class="bprice-row"><span class="bprice">$59.99</span><span class="bwas">$118.00</span></div>
+          <div class="bsave" style="display:inline-block;margin-bottom:7px">Save 50%</div>
+          <p class="bper">30 Day Focus · Free US Shipping</p>
+        </div>
+        <div class="bdiv"></div>
+        <div class="binc">
+          <div class="bitem">Synclarity Supplement (30-day supply)</div>
+          <div class="bitem">The Loop Breaker Guide — instant digital access</div>
+          <div class="bitem">30-Day Guided Tracker (sent Day 7)</div>
+          <div class="bitem">Free US Shipping</div>
+          <div class="bitem">30-Day Money-Back Guarantee</div>
+        </div>
+        <div class="bfoot">
+          <a href="https://sonicmind.co/checkout" target="_blank" class="bbtn">Get the Starter System</a>
+          <p class="bnote">Best for: first-timers ready to try</p>
+        </div>
+      </div>
+
+      <div class="bc pop">
+        <div class="pop-badge">⚡ Most Popular — Best Value</div>
+        <div style="padding:20px 22px 0;text-align:center;margin-top:14px"><img src="BNX2.png" alt="Performance Bundle" style="width:100%;max-width:240px;height:auto;border-radius:8px"></div>
+        <div class="bhead">
+          <div class="bplan">60-Day System</div>
+          <div class="bname">Performance Cycle</div>
+          <div class="bprice-row"><span class="bprice">$161.97</span><span class="bwas">$179.97</span></div>
+          <div class="bsave" style="display:inline-block;margin-bottom:7px">Save 10%</div>
+          <p class="bper">Most Popular · Free Shipping</p>
+        </div>
+        <div class="bdiv"></div>
+        <div class="binc">
+          <div class="bitem">2× Synclarity Supplement (60-day supply)</div>
+          <div class="bitem">The Loop Breaker Guide — instant digital access</div>
+          <div class="bitem">60-Day Extended Guided Tracker</div>
+          <div class="bitem">Free Priority US Shipping</div>
+          <div class="bitem">30-Day Money-Back Guarantee</div>
+          <div class="bitem"><strong>Bonus: Additional 10% off entire order</strong></div>
+        </div>
+        <div class="bfoot">
+          <a href="https://sonicmind.co/checkout" target="_blank" class="bbtn">Get the Committed System</a>
+          <p class="bnote">Best for: those ready to build lasting change</p>
+        </div>
+      </div>
+
+      <div class="bc">
+        <div style="padding:20px 22px 0;text-align:center"><img src="BNX3.png" alt="Transformation Bundle" style="width:100%;max-width:240px;height:auto;border-radius:8px"></div>
+        <div class="bhead">
+          <div class="bplan">90-Day System</div>
+          <div class="bname">Full Cognitive Edge</div>
+          <div class="bprice-row"><span class="bprice">$305.95</span><span class="bwas">$359.94</span></div>
+          <div class="bsave" style="display:inline-block;margin-bottom:7px">Save 15%</div>
+          <p class="bper">Best Value · Free Priority Shipping</p>
+        </div>
+        <div class="bdiv"></div>
+        <div class="binc">
+          <div class="bitem">3× Synclarity Supplement (90-day supply)</div>
+          <div class="bitem">The Loop Breaker Guide — instant digital access</div>
+          <div class="bitem">Full 90-Day Guided Tracker</div>
+          <div class="bitem">Free Priority US Shipping</div>
+          <div class="bitem">30-Day Money-Back Guarantee</div>
+          <div class="bitem"><strong>Bonus: Additional 15% off entire order</strong></div>
+          <div class="bitem"><strong>Bonus: VIP email support</strong></div>
+        </div>
+        <div class="bfoot">
+          <a href="https://sonicmind.co/checkout" target="_blank" class="bbtn">Get the Full Transformation</a>
+          <p class="bnote">Best for: serious about lasting results</p>
+        </div>
+      </div>
+    </div>
+    <div class="bun-warn">⚠️ Only <strong>47 units</strong> remaining in this production batch. All bundles ship from current stock.</div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="inn">
+    <div class="ey">Questions</div>
+    <h2 class="st">Everything you<br><em>want to know</em></h2>
+    <div class="faq-list">
+      <details class="fi"><summary class="fq">How quickly will I notice a difference?<span class="fplus">+</span></summary><div class="fa">Results vary by person. Some users notice subtle shifts within the first week — others need 2–3 weeks of consistent use before changes become clear. The full effect of the formula builds over time. The tracker, which arrives on Day 7, is designed to help you recognize shifts you might otherwise miss.</div></details>
+      <details class="fi"><summary class="fq">Why does the tracker arrive on Day 7, not immediately?<span class="fplus">+</span></summary><div class="fa">This is intentional design. By Day 7, you've had enough time to experience something real — even something subtle. The tracker gives you a structure to document and reinforce that experience. Sending it on Day 1 would give you nothing meaningful to write.</div></details>
+      <details class="fi"><summary class="fq">What if it doesn't work for me?<span class="fplus">+</span></summary><div class="fa">There's a full 30-day money-back guarantee. Complete the system as directed. If you don't experience a meaningful difference, email us at support@sonicmind.co for a complete refund — in accordance with our refund policy.</div></details>
+      <details class="fi"><summary class="fq">Are the ingredients safe? Any side effects?<span class="fplus">+</span></summary><div class="fa">Synclarity is stimulant-free, caffeine-free, and non-habit forming. All ingredients are generally well-tolerated at the dosages used. Please consult a healthcare professional before use if you are pregnant, breastfeeding, or taking prescription medications. These statements have not been evaluated by the FDA.</div></details>
+      <details class="fi"><summary class="fq">How is this different from other nootropics?<span class="fplus">+</span></summary><div class="fa">Synclarity is built around one core belief: a supplement alone isn't enough. The three components work together — the formula supports the mental conditions for change, the guide gives you the understanding of why patterns repeat, and the tracker makes your progress visible so it actually sticks. It's the combination of all three that makes the difference.</div></details>
+      <details class="fi"><summary class="fq">When will my order ship?<span class="fplus">+</span></summary><div class="fa">Orders are processed within 1–4 business days. US delivery typically arrives within 7–14 business days. You'll receive a tracking link by email once your order ships. The Loop Breaker guide is delivered digitally, immediately after purchase confirmation.</div></details>
+      <details class="fi"><summary class="fq">Can I upgrade my bundle after ordering?<span class="fplus">+</span></summary><div class="fa">Yes — email us at support@sonicmind.co within 24 hours of your order and we'll help you upgrade to a longer bundle at the discounted rate, subject to stock availability.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-section">
+  <div class="inn">
+    <div class="ey">Ready to Break the Cycle?</div>
+    <h2 class="st">Join 1,200+ people who<br><em>stopped starting over</em></h2>
+    <p class="bt" style="color:rgba(255,255,255,.5);max-width:480px;margin:0 auto">30 days. Three components. One decision.</p>
+    <div class="frrow">
+      <div class="mr"><div class="mstars">★★★★★</div><p class="mtext">"Week 3 and I still haven't gone back. That's new for me."</p><div class="mname">— Jordan M., TX</div></div>
+      <div class="mr"><div class="mstars">★★★★★</div><p class="mtext">"The tracker alone was worth the price. I finally see myself clearly."</p><div class="mname">— Maria T., CA</div></div>
+      <div class="mr"><div class="mstars">★★★★★</div><p class="mtext">"It's not about willpower. It's about the right system."</p><div class="mname">— Alex P., NY</div></div>
+    </div>
+    <div class="final-cg">
+      <a href="https://sonicmind.co/checkout" target="_blank" class="fbtn">
+        Get the Complete System
+        <small>$59.99 Starter · $161.97 Performance · $305.95 Full Edge</small>
+      </a>
+      <div class="fsub">30-Day Money-Back Guarantee · Free US Shipping · Only 47 units remaining</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="https://sonicmind.co" target="_blank"><img src="logo.png" alt="Sonic Mind" style="height:36px;width:auto"></a>
+  <div class="flinks">
+    <a href="https://sonicmind.co" target="_blank">sonicmind.co</a>
+    <a href="https://sonicmind.co/checkout" target="_blank">Buy Now</a>
+    <a href="mailto:support@sonicmind.co">support@sonicmind.co</a>
+  </div>
+  <p class="fdisc">These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease. Individual results may vary. Always consult a qualified healthcare professional before starting any supplement regimen. The information provided on this page is for educational purposes only and is not intended as medical advice.</p>
+</footer>
+
+<script>
+(function(){
+  var end=new Date(Date.now()+48*60*60*1000);
+  function pad(n){return n<10?'0'+n:''+n}
+  function tick(){
+    var d=end-Date.now();
+    if(d<0)d=0;
+    document.getElementById('th').textContent=pad(Math.floor(d/3600000));
+    document.getElementById('tm').textContent=pad(Math.floor((d%3600000)/60000));
+    document.getElementById('ts').textContent=pad(Math.floor((d%60000)/1000));
+  }
+  tick();setInterval(tick,1000);
+})();
+</script>
+</body>
+</html>
